@@ -1,0 +1,31 @@
+ARG CODE_VERSION=latest
+
+FROM nginx:${CODE_VERSION}
+
+ENV
+
+LABEL key="value"
+
+RUN 
+
+WORKDIR /the/workdir/path
+
+USER user
+
+CMD [ "executable" ]
+
+ENTRYPOINT [ "" ]
+
+ONBUILD ADD ./app/scr 
+
+SHELL   
+
+HEALTHCHECK NONE
+
+EXPOSE 8080
+
+COPY source dest
+
+ADD source dest
+
+VOLUME [ "/data" ]
