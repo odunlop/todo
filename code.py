@@ -3,9 +3,15 @@ TEXT HERE
 """
 
 import re
-from pathlib import Path
 import os
+import sys
+import colorama
+from colorama import Fore, Style
 
+
+class InvalidFileName(Exception):
+    "Raised when the input value is less than 18"
+    pass
 
 ############### IDENTIFY FILES ###############
 
@@ -26,16 +32,25 @@ def find_overwrite_section(lines):
             count += 1
             file = result[1].group(1)
             files.append(file)
-    print(f"{count} Files found")
+    print(f"{count} Files found...")
+    for file in files:
+        print(Fore.BLUE + f"    {file}")
+    print(Style.RESET_ALL)
     return files
 
 
 
 ############### FIND LINES ###############
 
+
 def get_lines(filepath):
-    file = open(filepath, "r")
+    try:
+        file = open(filepath, "r") #the code that raises the error
+    except OSError:
+        sys.tracebacklimit = 0
+        raise OSError("Invalid filepath provided:" + Fore.RED + f"\n    {filepath}") from None
     return file.readlines()
+
 
 
 ############### PRINT STEPS ###############
@@ -107,7 +122,7 @@ def search_and_replace(dictionary):
             f.write(file)
 
             # Writing replaced data in the file
-            # f.truncate()
+            f.truncate()
     
     return "Replaced"
 
@@ -134,5 +149,6 @@ dictionary = check_files(files)
 duplicate_data()
 # [ ] Go back and overwrite the section with the matching filename
 search_and_replace(dictionary)
+print("README Updated")
 
 #### NEED TO BUILD VALIDATOR FOR FILEPATH
