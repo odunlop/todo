@@ -6,3 +6,5 @@ RUN apk add --no-cache mysql-client
 
 ##- Second test
 ENTRYPOINT ["mysql"]
+
+##- Third test >:(

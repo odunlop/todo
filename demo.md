@@ -6,6 +6,6 @@ Blah Blah
 
 {{ Blah Blah }}
 
-{{ Documentation Section: ./code.py }}
+{{ Documentation Section: ./gen_docs.py }}
 
 HIIIIII

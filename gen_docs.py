@@ -78,13 +78,13 @@ def check_files(files):
 
 ############### SEARCH AND REPLACE? ###############
 
-def duplicate_data():
-    with open("README.md.gotmpl", "r+") as f:
+def duplicate_data(template_filepath, readme_filepath):
+    with open(template_filepath, "r+") as f:
         data = f.read()
-        if (os.path.exists("README.md") == True):
-            os.remove("README.md")
+        if (os.path.exists(readme_filepath) == True):
+            os.remove(readme_filepath)
             # create file
-        readme = open("README.md", "w")
+        readme = open(readme_filepath, "w")
         readme.writelines(data)
         readme.close()
 
@@ -126,8 +126,8 @@ def search_and_replace(dictionary):
     
     return "Replaced"
 
-comments = ['1. This is a test', '2. Second test']
-format_comments(comments)
+# comments = ['1. This is a test', '2. Second test']
+# format_comments(comments)
 
 # ##- Open the file
 # dockerfile = open("Dockerfile", "r")
@@ -139,16 +139,4 @@ format_comments(comments)
 # print(steps)
 
 
-# [ ] Go through README and find all files
-# [ ] Put those filenames in list
-lines = get_lines("README.md.gotmpl")
-files = find_overwrite_section(lines)
-# [ ] Loop through files, for each file generate a list with steps
-dictionary = check_files(files)
-# [ ] Copy README.md.gotmpl data to README
-duplicate_data()
-# [ ] Go back and overwrite the section with the matching filename
-search_and_replace(dictionary)
-print("README Updated")
-
-#### NEED TO BUILD VALIDATOR FOR FILEPATH
+#### CHECK IF ANY CHANGES
