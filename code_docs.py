@@ -55,9 +55,9 @@ def get_lines(filepath):
 
 ############### PRINT STEPS ###############
 
-def get_comments(lines):
+def get_comments(lines, comment_match):
     steps = []
-    comment_match = "##-\s(.*)\n"
+    # comment_match = "##-\s(.*)\n"
     count = 0
     for line in lines:
         result = find_match(line, comment_match)
@@ -70,9 +70,10 @@ def get_comments(lines):
 
 def check_files(files):
     result = {}
+    comment_match = "##-\s(.*)\n"
     for file in files:
         lines = get_lines(file)
-        comments = get_comments(lines)
+        comments = get_comments(lines, comment_match)
         result[file] = comments
     return result
 
