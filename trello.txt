@@ -1,6 +1,18 @@
 PRETEND TELLO BOARD
 
+Task: Functionality for init new board  (./script.sh:3)
+
+Task: Functionality to add new card  (./script.sh:4)
+
+Task: Integrate python script to add new card for each TO-DO (./script.sh:5)
+
 Task: Update entrypoint (./Dockerfile:8)
+
+Task: Write some tests (./get_todo.py:8)
+
+Task: Add some sort of logging so we can tell users which files got skipped for content issues (./get_todo.py:27)
+
+Task: Extract to seperate file (./get_todo.py:57)
 
 Task: This is a single line comment in Python (./example.txt:1)
 
@@ -13,10 +25,4 @@ Task: This is a single line comment in HTML --> (./example.txt:4)
 Task: This is a single line comment in CSS * (./example.txt:5)
 
 Task: This is a single line comment in Erlang (./example.txt:6)
-
-Task: Write some tests (./todo.py:8)
-
-Task: Add some sort of logging so we can tell users which files got skipped for content issues (./todo.py:27)
-
-Task: Extract to seperate file (./todo.py:57)
 
