@@ -6,7 +6,29 @@ import get_todo
 
 api_key = os.environ.get('TRELLO_API')
 token = os.environ.get('TRELLO_TOKEN')
-board_id = "6409b884e0650c7206272710"
+board_id_hardcoded = "6409b884e0650c7206272710"
+url = "https://trello.com/b/KZItRtcg/api-testing"
+
+# curl 'https://trello.com/b/KZItRtcg/api-testing.json?key=${TRELLO_API}&token=${TRELLO_TOKEN}'
+
+def get_board_id(url):
+    headers = {
+        "Accept": "application/json"
+    }
+
+    query = {
+        'key': api_key,
+        'token': token
+    }
+
+    response = requests.request(
+        "GET",
+        f"{url}.json",
+        headers=headers,
+        params=query
+    )
+    data = json.loads(response.text)
+    return data["id"]
 
 def get_lists(board_id):
     url = f"https://api.trello.com/1/boards/{board_id}/lists"
@@ -86,15 +108,15 @@ def write_todos(dir, list_id):
 
 # And then add the id to the line....
 def remember_todo(tickets):
-# FIRST I NEED TO FIX CODE WITH SHIT AT THE END OTHERWISE WILL BREAK THE COMMENT
 # 1. Loop through each ticket
-# 2. Go to file mentioned and do search and replace using regex
+# # 2. Go to file mentioned and do search and replace using regex
     pass
  
 
 # Then when it goes to check, it finds a card with the same shortid and checks the long ids match (long ids stored in a .todo file??? maybe use the python to yml thing)
 # ALSO need to make sure it's not in "in progress" or any other list in the board
 
+board_id = get_board_id(url)
 lists = get_lists(board_id)
 list_id = get_todo_list_id(lists)
 dir = "."

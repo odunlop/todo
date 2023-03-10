@@ -4,9 +4,9 @@ Task: Update entrypoint  (./Dockerfile:8)
 
 Task: Write some tests (./get_todo.py:8)
 
-Task: Add some sort of logging so we can tell users which files got skipped for content issues (./get_todo.py:35)
+Task: Add some sort of logging so we can tell users which files got skipped for content issues (./get_todo.py:31)
 
-Task: Extract to seperate file (./get_todo.py:65)
+Task: Extract to seperate file (./get_todo.py:61)
 
 Task: This is a single line comment in Python (./example.txt:1)
 
