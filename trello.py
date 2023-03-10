@@ -84,16 +84,18 @@ def new_card(list_id, name, desc):
     return json_response["id"], json_response["idShort"]
 
 # Now we want to get the todos back with their corresponding ids....
+# TO_DO: Response if no new tickets
 def write_todos(dir, list_id):
     todo_tickets = []
     files = get_todo.list_all_files(dir)
-    todos_list = get_todo.get_all_todos(files)
+    todos_list = get_todo.get_new_todos(files)
+    if todos_list == {}:
+        print("No new tickets")
+        return None
     print("Updating Trello", end="", flush=True)
     for file, todos in todos_list.items():
         for todo, line_number in todos.items():
             id, short_id = new_card(list_id, todo, f"**Location:** `{file}:{line_number}`")
-            # print(id)
-            # print(short_id)
             ticket = {
                 "id": id,
                 "idShort": short_id,
@@ -109,9 +111,19 @@ def write_todos(dir, list_id):
 # And then add the id to the line....
 def remember_todo(tickets):
 # 1. Loop through each ticket
-# # 2. Go to file mentioned and do search and replace using regex
-    pass
- 
+    for ticket in tickets:
+        # print(ticket["origin"])
+        # print(ticket["content"])
+        # print(ticket["id"])
+        with open(rf"{ticket['origin']}", "r+") as file:
+            data = file.read()
+            data = data.replace(ticket["content"], f"{ticket['content']} [[{ticket['id']}]]")
+        with open(rf"{ticket['origin']}", "w") as file:
+            file.write(data)
+
+
+# Let's get it to only add tickets if not already existing
+
 
 # Then when it goes to check, it finds a card with the same shortid and checks the long ids match (long ids stored in a .todo file??? maybe use the python to yml thing)
 # ALSO need to make sure it's not in "in progress" or any other list in the board
@@ -121,6 +133,7 @@ lists = get_lists(board_id)
 list_id = get_todo_list_id(lists)
 dir = "."
 tickets = write_todos(dir, list_id)
+remember_todo(tickets)
 
-for ticket in tickets:
-    print(ticket)
+# for ticket in tickets:
+#     print(ticket)
