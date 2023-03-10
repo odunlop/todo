@@ -16,11 +16,15 @@ def list_all_files(dir):
     return files
 
 def get_all_todos(files):
+    regex_list = [
+        "(?:\[(\d*)\])\s?(?:(?:#)|(?:\/\/)|(?:–\s–)|(?:%))\sTO-DO:\s?(.*)\n?", # General match
+        "\[(\d*)\]\s<!--\sTO-DO:\s(.*)\s-->", # HTML match
+        "\[(\d*)\]\s\/\*\sTO-DO:\s(.*)\s\*" # CSS match
+    ]
     result = {}
-    comment_match = "(?:\[(\d*)\])\s(?:(?:#)|(?:\/\/)|(?:–\s–)|(?:<!--)|(?:\/\*)|(?:%))\sTO-DO:\s?(.*)\n?"
     for file in files:
         lines = get_lines(file)
-        comments = get_comments(lines, comment_match)
+        comments = get_comments(lines, regex_list)
         result[file] = comments
     return result
 
@@ -38,13 +42,13 @@ def get_lines(filepath):
         pass
     return lines
 
-def get_comments(lines, comment_match):
+def get_comments(lines, regex_list):
     todos = {}
     for line in lines:
-        result = code_docs.find_match(line, comment_match)
-        if result[0]:
-            # steps.append(f"{result[1].group(1)}. {result[1].group(9)}")
-            todos[result[1].group(2)] = result[1].group(1)
+        for regex in regex_list:
+            result = code_docs.find_match(line, regex)
+            if result[0] == True:
+                todos[result[1].group(2)] = result[1].group(1)
     return todos
 
 def write_todos(todos):

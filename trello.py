@@ -1,3 +1,4 @@
+from configparser import MissingSectionHeaderError
 import os
 import requests
 import json
@@ -60,6 +61,7 @@ def new_card(list_id, name, desc):
     json_response = json.loads(response.text)
     return json_response["id"], json_response["idShort"]
 
+# Now we want to get the todos back with their corresponding ids....
 def write_todos(dir, list_id):
     todo_tickets = []
     files = get_todo.list_all_files(dir)
@@ -81,9 +83,14 @@ def write_todos(dir, list_id):
             print(".", end="", flush=True)        
     return todo_tickets
 
-# Now we want to get the todos back with their corresponding ids....
 
 # And then add the id to the line....
+def remember_todo(tickets):
+# FIRST I NEED TO FIX CODE WITH SHIT AT THE END OTHERWISE WILL BREAK THE COMMENT
+# 1. Loop through each ticket
+# 2. Go to file mentioned and do search and replace using regex
+    pass
+ 
 
 # Then when it goes to check, it finds a card with the same shortid and checks the long ids match (long ids stored in a .todo file??? maybe use the python to yml thing)
 # ALSO need to make sure it's not in "in progress" or any other list in the board
