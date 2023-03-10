@@ -1,11 +1,5 @@
 PRETEND TELLO BOARD
 
-Task: Functionality for init new board  (./script.sh:3)
-
-Task: Functionality to add new card  (./script.sh:4)
-
-Task: Integrate python script to add new card for each TO-DO (./script.sh:5)
-
 Task: Update entrypoint (./Dockerfile:8)
 
 Task: Write some tests (./get_todo.py:8)

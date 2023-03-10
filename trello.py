@@ -57,23 +57,41 @@ def new_card(list_id, name, desc):
         params=query
     )
 
-    print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
-
-
-
-# Get list of Todos and write them
+    json_response = json.loads(response.text)
+    return json_response["id"], json_response["idShort"]
 
 def write_todos(dir, list_id):
+    todo_tickets = []
     files = get_todo.list_all_files(dir)
     todos_list = get_todo.get_all_todos(files)
+    print("Updating Trello", end="", flush=True)
     for file, todos in todos_list.items():
         for todo, line_number in todos.items():
-            new_card(list_id, todo, f"**Location:** `{file}:{line_number}`")
+            id, short_id = new_card(list_id, todo, f"**Location:** `{file}:{line_number}`")
+            # print(id)
+            # print(short_id)
+            ticket = {
+                "id": id,
+                "idShort": short_id,
+                "content": todo,
+                "origin": file,
+                "line_number": line_number
+            }
+            todo_tickets.append(ticket)
+            print(".", end="", flush=True)        
+    return todo_tickets
 
+# Now we want to get the todos back with their corresponding ids....
 
+# And then add the id to the line....
+
+# Then when it goes to check, it finds a card with the same shortid and checks the long ids match (long ids stored in a .todo file??? maybe use the python to yml thing)
+# ALSO need to make sure it's not in "in progress" or any other list in the board
 
 lists = get_lists(board_id)
-print(lists)
 list_id = get_todo_list_id(lists)
 dir = "."
-write_todos(dir, list_id)
+tickets = write_todos(dir, list_id)
+
+for ticket in tickets:
+    print(ticket)
