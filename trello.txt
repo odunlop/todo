@@ -1,4 +1,2 @@
 PRETEND TELLO BOARD
 
-Task: Write some tests (./get_todo.py:9)
-
