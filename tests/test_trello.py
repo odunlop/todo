@@ -142,3 +142,6 @@ class TestTrello(unittest.TestCase):
         name = "TestLabel"
         label_id = trello.get_project_label(b_id, name)
         self.assertRegex(label_id, "^[0-9a-fA-F]{24}$")
+    
+    def test_get_repo_name(self):
+        self.assertEqual(trello.get_repo_name(), "todo")

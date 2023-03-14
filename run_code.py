@@ -1,13 +1,13 @@
-import code_docs
+import trello
+import os
 
-# [ ] Go through README and find all files
-# [ ] Put those filenames in list
-lines = code_docs.get_lines("README.md.gotmpl")
-files = code_docs.find_overwrite_section(lines)
-# [ ] Loop through files, for each file generate a list with steps
-dictionary = code_docs.check_files(files)
-# [ ] Copy README.md.gotmpl data to README
-code_docs.duplicate_data("README.md.gotmpl", "README.md")
-# [ ] Go back and overwrite the section with the matching filename
-code_docs.search_and_replace(dictionary)
-print("README Updated")
+board_id_hardcoded = "6409b884e0650c7206272710"
+board_url = "https://trello.com/b/KZItRtcg/api-testing"
+
+board_id = trello.get_board_id(board_url)
+lists = trello.get_lists(board_id)
+list_id = trello.get_todo_list_id(lists)
+dir = "."
+repo_name = trello.get_repo_name()
+tickets = trello.write_todos(dir, list_id, repo_name, board_id)
+trello.remember_todo(tickets)

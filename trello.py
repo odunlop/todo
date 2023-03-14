@@ -1,20 +1,14 @@
-from cProfile import label
-from configparser import MissingSectionHeaderError
 import os
 import requests
 import json
 import get_todo
-import random
-import string
+from git import Repo
+
 
 api_key = os.environ.get('TRELLO_API')
 token = os.environ.get('TRELLO_TOKEN')
+label_choice = os.environ.get('LABEL_TICKETS')
 board_id_hardcoded = "6409b884e0650c7206272710"
-board_url = "https://trello.com/b/KZItRtcg/api-testing"
-# repo_name = "Trello Testing Project" # Get this from git???
-# repo_name = ''.join(random.choices(string.ascii_uppercase +string.digits, k=6))
-
-# curl 'https://trello.com/b/KZItRtcg/api-testing.json?key=${TRELLO_API}&token=${TRELLO_TOKEN}'
 
 ### BOARDS ###
 
@@ -36,7 +30,6 @@ def get_board_id(url):
     )
     data = json.loads(response.text)
     return data["id"]
-
 ### LISTS ###
 
 def get_lists(board_id):
@@ -170,6 +163,11 @@ def get_project_label(board_id, repo_name):
         label_id = label_project(board_id, repo_name, labels)
         return label_id
 
+def get_repo_name():
+    repo = Repo(".")
+    repo_name = repo.remotes.origin.url.split('.git')[0].split('/')[-1]
+    return repo_name
+
 ### CARDS ###
 
 def label_card(card_id, label_id):
@@ -214,8 +212,8 @@ def new_card(list_id, name, desc, label_id):
 
     json_response = json.loads(response.text)
 
-    # LABEL CARD HERE!!!!!!
-    label_card(json_response["id"], label_id)
+    if label_choice == "True":
+        label_card(json_response["id"], label_id)
 
     return json_response["id"], json_response["idShort"]
 
@@ -243,13 +241,8 @@ def write_todos(dir, list_id, repo_name, board_id):
             print(".", end="", flush=True)        
     return todo_tickets
 
-# And then add the id to the line....
 def remember_todo(tickets):
-# 1. Loop through each ticket
     for ticket in tickets:
-        # print(ticket["origin"])
-        # print(ticket["content"])
-        # print(ticket["id"])
         with open(rf"{ticket['origin']}", "r+") as file:
             data = file.read()
             data = data.replace(ticket["content"], f"{ticket['content']} [[{ticket['id']}]]")
@@ -258,24 +251,13 @@ def remember_todo(tickets):
 
 
 # THINGS TO DO:
-# Checks if placed in Done??? Maybe allow users to configure the name of their "done" column 
 
-# Checks if existing cards still exist in thingy
+# 1) Ensure there is a To Do column and either (a) create one if not or (b) give error message telling them to make one
 
-# Colour categorise?? Also add from which repo to card notes
+# 2) Checks if placed in Done??? Maybe allow users to configure the name of their "done" column 
 
-# Response if no new tickets
+# 3) Checks if existing cards still exist in thingy
 
-# Set ENV for colour categorise that users can set as true or false
+# 4) Response if no new tickets
 
-board_id = get_board_id(board_url)
-# # label_project(board_id, repo_name)
-# label = get_project_label(board_id, repo_name)
-# print(label)
-
-lists = get_lists(board_id)
-list_id = get_todo_list_id(lists)
-dir = "."
-repo_name = "TODO" #  get this from git???
-tickets = write_todos(dir, list_id, repo_name, board_id)
-remember_todo(tickets)
+# 5) Set ENV for colour categorise that users can set as true or false
