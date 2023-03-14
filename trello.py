@@ -37,6 +37,8 @@ def get_board_id(url):
     data = json.loads(response.text)
     return data["id"]
 
+### LISTS ###
+
 def get_lists(board_id):
     url = f"https://api.trello.com/1/boards/{board_id}/lists"
     headers = {
@@ -58,6 +60,11 @@ def get_lists(board_id):
     lists = json.loads(response.text)
     return lists
 
+def get_todo_list_id(lists):
+    for list in lists:
+        if list["name"] == "To Do":
+            return list["id"]
+    pass
 ### LABELS ###
 
 def get_all_labels(board_id):
@@ -168,12 +175,6 @@ def get_project_label(board_id, repo_name):
 
 ### CARDS ###
 
-def get_todo_list_id(lists):
-    for list in lists:
-        if list["name"] == "TO-DO":
-            return list["id"]
-    pass
-
 def new_card(list_id, name, desc):
     url = "https://api.trello.com/1/cards"
 
@@ -248,12 +249,14 @@ def remember_todo(tickets):
 
 # Set ENV for colour categorise that users can set as true or false
 
-board_id = get_board_id(board_url)
-# label_project(board_id, repo_name)
-label = get_project_label(board_id, repo_name)
-print(label)
+# board_id = get_board_id(board_url)
+# # # label_project(board_id, repo_name)
+# # label = get_project_label(board_id, repo_name)
+# # print(label)
 
 # lists = get_lists(board_id)
+# print(lists)
+# print(lists[0]["name"])
 # list_id = get_todo_list_id(lists)
 # dir = "."
 # tickets = write_todos(dir, list_id)

@@ -3,9 +3,9 @@ import unittest
 import sys
 import os
 
-sys.path.append('../docker-docs')
+sys.path.append('../todo')
 import code_docs
-sys.path.remove('../docker-docs')
+sys.path.remove('../todo')
 
 class TestCode(unittest.TestCase):
 
