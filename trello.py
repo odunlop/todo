@@ -65,6 +65,7 @@ def get_todo_list_id(lists):
         if list["name"] == "To Do":
             return list["id"]
     pass
+
 ### LABELS ###
 
 def get_all_labels(board_id):
@@ -144,11 +145,8 @@ def new_label(board_id, repo_name, colour):
     return json.loads(response.text)
 
 def label_project(board_id, repo_name, labels):
-    # labels = get_all_labels(board_id)
-
-    # Check if any avaliable labels are free
+    # Check if any avaliable labels are free, otherwise creqte
     free_labels = get_free_labels(labels)
-    print(free_labels)
     if free_labels != []:
         label = amend_label(free_labels[0], repo_name)
     else:
