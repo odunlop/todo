@@ -64,7 +64,6 @@ def board_id(id):
             return board["id"]
 
 b_id = board_id(get_member_id(member_name))
-random_name = ''.join(random.choices(string.ascii_uppercase +string.digits, k=6))
 
 class TestTrello(unittest.TestCase):
 

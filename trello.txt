@@ -1,10 +1,10 @@
 PRETEND TELLO BOARD
 
-Task: This is a single line comment in Python  (./example.txt:1)
+Task: This is a single line comment in Python (./example.txt:1)
 
-Task: This is a single line comment in Java  (./example.txt:2)
+Task: This is a single line comment in Java (./example.txt:2)
 
-Task: This is a single line comment in Haskell  (./example.txt:3)
+Task: This is a single line comment in Haskell (./example.txt:3)
 
 Task: This is a single line comment in HTML (./example.txt:4)
 

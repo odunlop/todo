@@ -12,7 +12,7 @@ token = os.environ.get('TRELLO_TOKEN')
 board_id_hardcoded = "6409b884e0650c7206272710"
 board_url = "https://trello.com/b/KZItRtcg/api-testing"
 # repo_name = "Trello Testing Project" # Get this from git???
-repo_name = ''.join(random.choices(string.ascii_uppercase +string.digits, k=6))
+# repo_name = ''.join(random.choices(string.ascii_uppercase +string.digits, k=6))
 
 # curl 'https://trello.com/b/KZItRtcg/api-testing.json?key=${TRELLO_API}&token=${TRELLO_TOKEN}'
 
@@ -156,7 +156,6 @@ def label_project(board_id, repo_name, labels):
     print("Label for project created")
     return label["id"]
 
-
 def get_project_label(board_id, repo_name):
     labels = get_all_labels(board_id)
     exists = False
@@ -173,7 +172,24 @@ def get_project_label(board_id, repo_name):
 
 ### CARDS ###
 
-def new_card(list_id, name, desc):
+def label_card(card_id, label_id):
+    url = f"https://api.trello.com/1/cards/{card_id}/idLabels"
+
+    query = {
+        'key': api_key,
+        'token': token,
+        'value': label_id
+    }
+
+    response = requests.request(
+        "POST",
+        url,
+        params=query
+    )
+
+    return json.loads(response.text)
+
+def new_card(list_id, name, desc, label_id):
     url = "https://api.trello.com/1/cards"
 
     headers = {
@@ -197,20 +213,25 @@ def new_card(list_id, name, desc):
     )
 
     json_response = json.loads(response.text)
+
+    # LABEL CARD HERE!!!!!!
+    label_card(json_response["id"], label_id)
+
     return json_response["id"], json_response["idShort"]
 
 # TO_DO: Response if no new tickets
-def write_todos(dir, list_id):
+def write_todos(dir, list_id, repo_name, board_id):
     todo_tickets = []
     files = get_todo.list_all_files(dir)
     todos_list = get_todo.get_new_todos(files)
+    label = get_project_label(board_id, repo_name)
     if todos_list == {}:
         print("No new tickets")
         return None
     print("Updating Trello", end="", flush=True)
     for file, todos in todos_list.items():
         for todo, line_number in todos.items():
-            id, short_id = new_card(list_id, todo, f"**Location:** `{file}:{line_number}`")
+            id, short_id = new_card(list_id, todo, f"**Location:** `{file}:{line_number}`", label)
             ticket = {
                 "id": id,
                 "idShort": short_id,
@@ -247,18 +268,14 @@ def remember_todo(tickets):
 
 # Set ENV for colour categorise that users can set as true or false
 
-# board_id = get_board_id(board_url)
-# # # label_project(board_id, repo_name)
-# # label = get_project_label(board_id, repo_name)
-# # print(label)
+board_id = get_board_id(board_url)
+# # label_project(board_id, repo_name)
+# label = get_project_label(board_id, repo_name)
+# print(label)
 
-# lists = get_lists(board_id)
-# print(lists)
-# print(lists[0]["name"])
-# list_id = get_todo_list_id(lists)
-# dir = "."
-# tickets = write_todos(dir, list_id)
-# remember_todo(tickets)
-
-# for ticket in tickets:
-#     print(ticket)
+lists = get_lists(board_id)
+list_id = get_todo_list_id(lists)
+dir = "."
+repo_name = "TODO" #  get this from git???
+tickets = write_todos(dir, list_id, repo_name, board_id)
+remember_todo(tickets)
