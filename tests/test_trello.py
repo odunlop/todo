@@ -145,3 +145,21 @@ class TestTrello(unittest.TestCase):
     
     def test_get_repo_name(self):
         self.assertEqual(trello.get_repo_name(), "todo")
+
+    ### CARDS ###
+    def test_new_card(self):
+        lists = trello.get_lists(b_id)
+        list_id = trello.get_todo_list_id(lists)
+        name = "Test To-Do"
+        desc = "This is a test card"
+        label_id = trello.get_project_label(b_id, "TestLabel")
+        trello.new_card(list_id, name, desc, label_id)
+        cards = trello.get_cards_in_list(list_id)
+        self.assertEqual([name, desc], [cards[0]["name"], cards[0]["desc"]])
+
+    def test_new_card_label(self):
+        lists = trello.get_lists(b_id)
+        list_id = trello.get_todo_list_id(lists)
+        cards = trello.get_cards_in_list(list_id)
+        label_name = cards[0]["labels"][0]["name"]
+        self.assertEqual("TestLabel", label_name)

@@ -4,14 +4,12 @@ import json
 import get_todo
 from git import Repo
 
-
 api_key = os.environ.get('TRELLO_API')
 token = os.environ.get('TRELLO_TOKEN')
 label_choice = os.environ.get('LABEL_TICKETS')
 board_id_hardcoded = "6409b884e0650c7206272710"
 
 ### BOARDS ###
-
 def get_board_id(url):
     headers = {
         "Accept": "application/json"
@@ -30,8 +28,8 @@ def get_board_id(url):
     )
     data = json.loads(response.text)
     return data["id"]
-### LISTS ###
 
+### LISTS ###
 def get_lists(board_id):
     url = f"https://api.trello.com/1/boards/{board_id}/lists"
     headers = {
@@ -59,8 +57,8 @@ def get_todo_list_id(lists):
             return list["id"]
     pass
 
-### LABELS ###
 
+### LABELS ###
 def get_all_labels(board_id):
     url = f"https://api.trello.com/1/boards/{board_id}/labels"
 
@@ -169,6 +167,26 @@ def get_repo_name():
     return repo_name
 
 ### CARDS ###
+def get_cards_in_list(id):
+    url = f"https://api.trello.com/1/lists/{id}/cards"
+
+    headers = {
+        "Accept": "application/json"
+    }
+
+    query = {
+        'key': api_key,
+        'token': token
+    }
+
+    response = requests.request(
+        "GET",
+        url,
+        headers=headers,
+        params=query
+    )
+
+    return json.loads(response.text)
 
 def label_card(card_id, label_id):
     url = f"https://api.trello.com/1/cards/{card_id}/idLabels"
@@ -260,4 +278,4 @@ def remember_todo(tickets):
 
 # 4) Response if no new tickets
 
-# 5) Set ENV for colour categorise that users can set as true or false
+# 5) Think about how I want to proceed with persisting data

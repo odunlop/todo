@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+# Create test board, get test board ID, run tests and delete test board when done
 curl -s --request POST --url "https://api.trello.com/1/boards/?name=TestBoard&key=${TRELLO_API}&token=${TRELLO_TOKEN}" | jq .id > id &&\
 str_id=$(cat id) &&\
 regex='"([0-9a-fA-F]{24})"' &&\

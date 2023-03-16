@@ -6,7 +6,7 @@ import re
 import colorama
 from colorama import Fore, Style
 
-# TO_DO: Write some tests
+# TO-DO: Write tests for these funcs
 
 def list_all_files(dir):
     list = glob.glob(dir + '/**/*', recursive=True)
@@ -62,11 +62,3 @@ def write_todos(todos):
         for todo, line_number in todos.items():
             f.write(f"Task: {todo} ({file}:{line_number})\n\n")
     f.close()
-
-# Extract to seperate file
-files = list_all_files(".")
-result = get_new_todos(files)
-f = open("trello.txt", "w")
-f.write("PRETEND TELLO BOARD\n\n")
-f.close()
-write_todos(result)
