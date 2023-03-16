@@ -1,5 +1,3 @@
-from cProfile import label
-from cgi import test
 import unittest
 import sys
 import requests

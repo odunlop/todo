@@ -1,12 +1,14 @@
-import code_docs
-import sys
 import os
 import glob
 import re
-import colorama
-from colorama import Fore, Style
 
 # TO-DO: Write tests for these funcs
+def find_match(line, regex):
+    match = re.search(rf'{regex}', line)
+    if match:
+        return True, match
+    else:
+        return False, None
 
 def list_all_files(dir):
     list = glob.glob(dir + '/**/*', recursive=True)
@@ -31,9 +33,9 @@ def get_new_todos(files):
 
 # Add some sort of logging so we can tell users which files got skipped for content issues
 def get_lines(filepath):
+    lines = []
     try:
         file = open(filepath, "r") #the code that raises the error
-        lines = []
         count = 0
         result = file.readlines()
         for line in result:
@@ -49,7 +51,7 @@ def get_comments(lines, regex_list):
     for line in lines:
         for regex in regex_list:
             already_exists = re.search(rf"{existing_todo_pattern}", line)
-            result = code_docs.find_match(line, regex)
+            result = find_match(line, regex)
             if already_exists:
                 pass
             elif result[0] == True:

@@ -10,4 +10,4 @@ list_id = trello.get_todo_list_id(lists)
 dir = "."
 repo_name = trello.get_repo_name()
 tickets = trello.write_todos(dir, list_id, repo_name, board_id)
-trello.remember_todo(tickets)
+# trello.remember_todo(tickets)
