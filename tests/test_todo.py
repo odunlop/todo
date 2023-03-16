@@ -40,13 +40,14 @@ class TestToDo(unittest.TestCase):
         self.assertEqual(expected_result, result)
     
     def test_get_lines(self):
+        todo = "TO-DO"
         result = get_todo.get_lines(test_files[0])
         expected_result = [
-            '[1] # TO-DO: This is a single line comment in Python\n', 
-            '[2] // TO-DO: This is a single line comment in Java\n', 
-            '[3] – – TO-DO: This is a single line comment in Haskell\n', 
-            '[4] <!-- TO-DO: This is a single line comment in HTML -->\n', 
-            '[5] /* TO-DO: This is a single line comment in CSS *\n', 
-            '[6] % TO-DO: This is a single line comment in Erlang\n'
+            f'[1] # {todo}: This is a single line comment in Python\n', 
+            f'[2] // {todo}: This is a single line comment in Java\n', 
+            f'[3] – – {todo}: This is a single line comment in Haskell\n', 
+            f'[4] <!-- {todo}: This is a single line comment in HTML -->\n', 
+            f'[5] /* {todo}: This is a single line comment in CSS *\n', 
+            f'[6] % {todo}: This is a single line comment in Erlang\n'
         ]
         self.assertEqual(expected_result, result)

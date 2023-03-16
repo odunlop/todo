@@ -2,7 +2,6 @@ import os
 import glob
 import re
 
-# TO-DO: Write tests for these funcs
 def find_match(line, regex):
     match = re.search(rf'{regex}', line)
     if match:
@@ -35,7 +34,7 @@ def get_new_todos(files):
 def get_lines(filepath):
     lines = []
     try:
-        file = open(filepath, "r") #the code that raises the error
+        file = open(filepath, "r")
         count = 0
         result = file.readlines()
         for line in result:
