@@ -14,6 +14,7 @@ api_key = os.environ.get('TRELLO_API')
 token = os.environ.get('TRELLO_TOKEN')
 member_name = os.environ.get('TRELLO_NAME')
 board_name = os.environ.get('BOARD_NAME')
+b_id = os.environ.get('TRELLO_BOARD_ID')
 
 def get_member_id(name):
     url = f"https://api.trello.com/1/members/{name}"
@@ -36,34 +37,6 @@ def get_member_id(name):
 
     response = json.loads(response.text)
     return response["id"]
-
-def board_id(id):
-    url = f"https://api.trello.com/1/members/{id}/boards"
-
-    headers = {
-        "Accept": "application/json"
-    }
-
-    query = {
-        'key': api_key,
-        'token': token
-    }
-
-    response = requests.request(
-        "GET",
-        url,
-        headers=headers,
-        params=query
-    )
-
-    boards = json.loads(response.text)
-
-    for board in boards:
-        # if board["name"] == "TestBoard":
-        if board["name"] == board_name:
-            return board["id"]
-
-b_id = board_id(get_member_id(member_name))
 
 class TestTrello(unittest.TestCase):
 
