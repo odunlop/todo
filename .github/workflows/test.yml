@@ -1,0 +1,29 @@
+name: Python package
+
+on: [push, pull_request]
+
+jobs:
+  test-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Test with pytest
+        env:
+          TRELLO_API: ${{ secrets.TRELLO_API }}
+          TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
+          LABEL_TICKETS: "True"
+          TRELLO_NAME: OrlaDunlop
+        run: |
+          pytest ./tests/test_todo.py --disable-warnings
+          bash ${GITHUB_WORKSPACE}/test.sh

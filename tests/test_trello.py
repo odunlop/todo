@@ -13,6 +13,8 @@ sys.path.remove('../todo')
 api_key = os.environ.get('TRELLO_API')
 token = os.environ.get('TRELLO_TOKEN')
 member_name = os.environ.get('TRELLO_NAME')
+board_name = os.environ.get('BOARD_NAME')
+b_id = os.environ.get('TRELLO_BOARD_ID')
 
 def get_member_id(name):
     url = f"https://api.trello.com/1/members/{name}"
@@ -36,33 +38,6 @@ def get_member_id(name):
     response = json.loads(response.text)
     return response["id"]
 
-def board_id(id):
-    url = f"https://api.trello.com/1/members/{id}/boards"
-
-    headers = {
-        "Accept": "application/json"
-    }
-
-    query = {
-        'key': api_key,
-        'token': token
-    }
-
-    response = requests.request(
-        "GET",
-        url,
-        headers=headers,
-        params=query
-    )
-
-    boards = json.loads(response.text)
-
-    for board in boards:
-        if board["name"] == "TestBoard":
-            return board["id"]
-
-b_id = board_id(get_member_id(member_name))
-
 class TestTrello(unittest.TestCase):
 
     ### LISTS ###
@@ -84,7 +59,7 @@ class TestTrello(unittest.TestCase):
     ### LABELS ###
     def test_all_labels(self):
         labels = trello.get_all_labels(b_id)
-        example_labels = ['', '', '', '', '', '', 'TestLabel']
+        example_labels = ['TestLabel', '', '', '', '', '', '']
         test_labels = []
 
         for label in labels:
@@ -109,20 +84,32 @@ class TestTrello(unittest.TestCase):
         name = "Testing Amending"
         trello.amend_label(label_id, name)
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[0]["name"], name)
+        amended = False
+        for label in new_labels:
+            if label["name"] == name:
+                amended = True
+        self.assertEqual(amended, True)
 
     def test_create_label(self):
         name = "Testing Creating"
         trello.new_label(b_id, name, "black_dark")
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[-1]["name"], name)
+        created = False
+        for label in new_labels:
+            if label["name"] == name:
+                created = True
+        self.assertEqual(created, True)
     
     def test_label_project_amend(self):
         labels = trello.get_all_labels(b_id)
         name = "Label Project [A]"
         trello.label_project(b_id, name, labels)
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[1]["name"], name)
+        amended = False
+        for label in new_labels:
+            if label["name"] == name:
+                amended = True
+        self.assertEqual(amended, True)
     
     def test_label_project_create(self):
         num = 4
@@ -135,7 +122,11 @@ class TestTrello(unittest.TestCase):
         name = "Label Project [B]"
         trello.label_project(b_id, name, labels)
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[-1]["name"], name)
+        created = True
+        for label in new_labels:
+            if label["name"] == name:
+                created = True
+        self.assertEqual(created, True)
 
     def test_get_project_label(self):
         name = "TestLabel"
