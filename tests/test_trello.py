@@ -13,6 +13,7 @@ sys.path.remove('../todo')
 api_key = os.environ.get('TRELLO_API')
 token = os.environ.get('TRELLO_TOKEN')
 member_name = os.environ.get('TRELLO_NAME')
+board_name = os.environ.get('BOARD_NAME')
 
 def get_member_id(name):
     url = f"https://api.trello.com/1/members/{name}"
@@ -58,7 +59,8 @@ def board_id(id):
     boards = json.loads(response.text)
 
     for board in boards:
-        if board["name"] == "TestBoard":
+        # if board["name"] == "TestBoard":
+        if board["name"] == board_name:
             return board["id"]
 
 b_id = board_id(get_member_id(member_name))
