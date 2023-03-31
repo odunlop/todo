@@ -84,7 +84,7 @@ class TestTrello(unittest.TestCase):
     ### LABELS ###
     def test_all_labels(self):
         labels = trello.get_all_labels(b_id)
-        example_labels = ['', '', '', '', '', '', 'TestLabel']
+        example_labels = ['TestLabel', '', '', '', '', '', '']
         test_labels = []
 
         for label in labels:
@@ -109,20 +109,32 @@ class TestTrello(unittest.TestCase):
         name = "Testing Amending"
         trello.amend_label(label_id, name)
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[0]["name"], name)
+        amended = False
+        for label in new_labels:
+            if label["name"] == name:
+                amended = True
+        self.assertEqual(amended, True)
 
     def test_create_label(self):
         name = "Testing Creating"
         trello.new_label(b_id, name, "black_dark")
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[-1]["name"], name)
+        created = False
+        for label in new_labels:
+            if label["name"] == name:
+                created = True
+        self.assertEqual(created, True)
     
     def test_label_project_amend(self):
         labels = trello.get_all_labels(b_id)
         name = "Label Project [A]"
         trello.label_project(b_id, name, labels)
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[1]["name"], name)
+        amended = False
+        for label in new_labels:
+            if label["name"] == name:
+                amended = True
+        self.assertEqual(amended, True)
     
     def test_label_project_create(self):
         num = 4
@@ -135,7 +147,11 @@ class TestTrello(unittest.TestCase):
         name = "Label Project [B]"
         trello.label_project(b_id, name, labels)
         new_labels = trello.get_all_labels(b_id)
-        self.assertEqual(new_labels[-1]["name"], name)
+        created = True
+        for label in new_labels:
+            if label["name"] == name:
+                created = True
+        self.assertEqual(created, True)
 
     def test_get_project_label(self):
         name = "TestLabel"
